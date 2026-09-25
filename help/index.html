@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Codex LP制作スターターの2つのMarkdownの受取、コピー、送信順に関するヘルプです。">
+  <title>受取ヘルプ｜Codex LP制作スターター</title>
+  <link rel="icon" type="image/png" href="../assets/codex-ai-creator-logo.png">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script>document.documentElement.className="js";</script>
+  <script src="../assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand-link" href="../">Codex LP制作スターター</a>
+      <nav class="header-nav" aria-label="主要ナビゲーション">
+        <a href="../#files">2つのファイル</a>
+        <a href="../changelog/">変更履歴</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <header class="subpage-hero">
+      <div class="container">
+        <p class="eyebrow">Help</p>
+        <h1>受取ヘルプ</h1>
+        <p class="lead">2つのMarkdownの取得、コピー、送る順番を確認できます。Skillの設置は必要ありません。</p>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container prose">
+        <div class="notice">
+          <strong>受取と利用に、ローカルサーバー起動は不要です。</strong>
+          <p>この公開ページから2つのMarkdownを受け取り、Codexへ順番に送ってください。LPのpreviewもCodexが起動・確認します。</p>
+        </div>
+
+        <h2 id="download">1. ファイルをダウンロードできない</h2>
+        <ol>
+          <li>トップページの「2つの制作ファイル」へ戻ります。</li>
+          <li><code>セットアップ.md</code> と <code>lp実装.md</code> の個別リンクを試します。</li>
+          <li>ブラウザのダウンロード制限と保存先を確認します。</li>
+          <li>ZIPが取得できない場合も、2つの個別ファイルだけで利用できます。</li>
+        </ol>
+        <p>JavaScriptが無効でも個別ファイルとZIPのdownloadリンクは使用できます。</p>
+
+        <h2>2. コピーボタンが動かない</h2>
+        <p>個別ファイルをダウンロードするか、リンク先でMarkdownを開き、全文を手動でコピーしてください。スマートフォンでは長押し、PCではCtrl+C（macOSはCommand+C）を使えます。</p>
+
+        <h2>3. どちらを先に送るか分からない</h2>
+        <ol>
+          <li>CodexへLP用の作業フォルダを指定します。</li>
+          <li><code>セットアップ.md</code> を送ります。</li>
+          <li>assistantの応答に、作業フォルダの絶対パスと <code>[LP_STARTER_STATE: SETUP_READY]</code> があることを確認します。</li>
+          <li><code>lp実装.md</code> を送ります。</li>
+        </ol>
+        <p>2つを同時に送らず、準備完了の応答を間に挟んでください。</p>
+
+        <h2>4. セットアップで止まった</h2>
+        <p>作業フォルダが不明、存在しない、複数候補がある、アクセスできない場合、Codexは作業フォルダについて1問だけ確認します。正しい絶対パスを答えてください。推測でフォルダを作らせないでください。</p>
+
+        <h2>5. LP実装が開始されない</h2>
+        <p>直前のassistant応答に絶対パスと状態マーカーがない場合、lp実装は開始されません。現在のメッセージへ状態マーカーを書き足すのではなく、セットアップからやり直してください。</p>
+
+        <h2>6. 対話で答えが未定の場合</h2>
+        <p>「なし」「未定」も有効な回答です。色や余白のような可逆的な選好にはCodexが推奨案を出せますが、価格、実績、資格、口コミ、期限、法的事項は推測しません。Primary audienceとPrimary CTAは実装前に決めます。</p>
+
+        <h2>7. ZIPの完全性を確認したい</h2>
+        <p>version 2.0.1のZIPは <strong>16885 bytes</strong> です。期待するSHA-256は次の値です。</p>
+        <code class="checksum">b39b24ec5cbd7fde5e5d9a1d4b6371828ad10df656c1ca93bece722c522542a9</code>
+        <code class="install-path">sha256sum codex-lp-starter-v2.0.1.zip</code>
+
+        <h2>問い合わせ</h2>
+        <p><strong>問い合わせ窓口：<a href="https://x.com/itagent_oss">X @itagent_oss</a></strong></p>
+        <p>秘密情報、顧客個人情報、APIキー、パスワード、作業フォルダの中身は送らないでください。</p>
+
+        <div class="back-links">
+          <a class="button button-primary" href="../#files">2つの制作ファイルへ戻る</a>
+          <a class="button button-secondary" href="../#workflow">使い方を確認</a>
+          <a class="button button-secondary" href="../changelog/">最新版を確認</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Codex LP制作スターター</strong><p>非公式ガイド・受取時のローカル実行不要。</p></div>
+      <nav class="footer-links" aria-label="補助ナビゲーション">
+        <a href="../">トップ</a>
+        <a href="../changelog/">変更履歴</a>
+        <a href="../privacy/">プライバシー</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
