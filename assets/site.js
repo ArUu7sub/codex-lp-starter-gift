@@ -80,7 +80,7 @@
           );
           emit("codex_lp_file_copy", {
             file_name: button.dataset.fileName,
-            version: "2.0.1"
+            version: "2.0.2"
           });
         })
         .catch(function () {
@@ -166,13 +166,13 @@
     document.querySelectorAll("[data-copy-url]").forEach(setupCopyButton);
     document.querySelectorAll("[data-download]").forEach(setupDownload);
 
-    emit("codex_lp_view", { path: window.location.pathname, version: "2.0.1" });
+    emit("codex_lp_view", { path: window.location.pathname, version: "2.0.2" });
 
     document.querySelectorAll("[data-file-download]").forEach(function (link) {
       link.addEventListener("click", function () {
         emit("codex_lp_file_download", {
           file_name: link.dataset.fileName,
-          version: "2.0.1"
+          version: "2.0.2"
         });
       });
     });
@@ -185,7 +185,7 @@
 
     document.querySelectorAll("[data-changelog-link]").forEach(function (link) {
       link.addEventListener("click", function () {
-        emit("codex_lp_changelog_open", { version: "2.0.1" });
+        emit("codex_lp_changelog_open", { version: "2.0.2" });
       });
     });
   });

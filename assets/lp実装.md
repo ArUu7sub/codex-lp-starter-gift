@@ -34,6 +34,38 @@ Full相当では次を追加確認し、未解決riskを承認前と完了報告
 - implementation handoff：local asset、不要な外部依存、mobile、a11y、Primary CTAとproofの維持
 - final creative review：実画面を承認済みstructure、wireframe、visual directionと照合
 
+Hero背景画像の生成を含む新規LPは、原則としてFull相当で進めてください。
+
+## Vaultスキルの必須ルーティング
+
+実行環境で次のVaultスキルを利用できる場合は、名前付きの独立工程として実際に起動し、成果物を次工程へ引き継いでください。本文に同等の観点があるだけで、スキルを使用済みと報告してはいけません。
+
+`creative-project-manager`
+→ `design-reference-researcher`
+→ `lp-structure-planner`
+→ `wireframe-designer`
+→ ユーザーによる構成・ワイヤーフレーム確認
+→ `ui-visual-designer`
+→ `imagegen-art-director`
+→ 実装前承認
+→ `it-project-manager` / `frontend-builder`
+→ `user-journey-tester`
+→ 実装担当とは別の `creative-reviewer`
+
+- `creative-project-manager`は工程、handoff、承認gate、未解決riskを管理します。
+- `design-reference-researcher`は案件別referenceを選定し、模倣ではなく採用patternへ分解します。
+- `lp-structure-planner`はmessage hierarchy、section order、proof、objection、CTA flowを確定します。
+- `wireframe-designer`は構成確定後、visual directionより前に必ず実行します。
+- `ui-visual-designer`は承認対象のwireframeを変えずにvisual systemを定義します。
+- `imagegen-art-director`はHero背景の構図、copy safe area、被写体位置、mobile crop、生成promptを定義します。
+- `it-project-manager` / `frontend-builder`は承認済みhandoffに基づいて実装します。
+- `user-journey-tester`は主要導線と操作上のfrictionを確認します。
+- `creative-reviewer`は実装担当と分離し、承認済み要件との一致を独立判定します。
+
+利用できないスキルがある場合も該当工程を省略せず、このファイル内の要件で代替実行し、`SKILL_UNAVAILABLE_FALLBACK`と記録してください。利用できるのに起動しなかった場合は`NOT_USED`、実際に起動した場合だけ`USED`と記録します。スキルのinstallを利用者へ要求しません。
+
+各工程について、`skill名 / status / input / output / 次工程へのhandoff / 未解決事項`を会話内と`docs/lp/00-execution-routing.md`へ記録してください。
+
 ## 固定境界
 
 - ページ種別は、単一の主要conversionを持つLPです。
@@ -149,12 +181,85 @@ proofは、それが支える主張の近くへ置いてください。重要な
 
 ### Wireframe
 
+- 新規LPまたは全面改修では、構成確定後、visual directionより前に`wireframe-designer`を名前付きの独立工程として必ず実行してください。
 - mobile 390px想定を先に作り、desktop 1440px想定を続けてください。
 - 実際の見出し、CTA label、proof、注意事項を入れてください。
 - 色、影、装飾を決める前に、情報階層とreading orderを確認してください。
 - mobileは原則1列にしてください。
 - DOMのreading orderはmobileの理解順を基準にし、desktopの見た目だけのために崩さないでください。
 - full-bleed背景と中央寄せinner containerを別レイヤーとして示してください。
+- fixed header、mobile menuの閉状態・開状態、Hero、全section、CTA、footerを省略せず示してください。
+- Heroには採用するPattern AまたはPattern B、copy safe area、被写体の焦点、desktop／mobileのcrop、overlay範囲を記載してください。
+- mobileとdesktopの間で順序、配置、表示方法が変化する要素を一覧化してください。
+- visual designへ進む前の未解決事項と、確認したwireframe referenceの採否を記録してください。
+
+`wireframe-designer`の必須成果物は次のとおりです。
+
+1. 390pxを基準にしたmobile-first low-fidelity wireframe
+2. 1440pxを基準にしたdesktop adaptation wireframe
+3. 全sectionの順序、役割、実際の見出し、本文要旨
+4. Primary CTAのlabel、配置、繰り返し位置
+5. proof、注意事項、objectionの配置
+6. fixed header、mobile menu、Hero、footerの各状態
+7. DOM reading orderとvisual order
+8. visual designへ進む前の未解決事項
+9. 確認したwireframe referenceと採用・不採用pattern
+10. mobileとdesktop間で変化する項目
+
+両wireframeを会話内に提示し、`docs/lp/04-wireframe.md`へ保存する対象として明示してください。mobile／desktopの片方しかない場合、またはheader、Hero、Primary CTA、footerのいずれかが示されていない場合はvisual directionへ進んではいけません。
+
+### Heroの固定仕様
+
+Heroは、viewport幅いっぱいに生成画像を敷いたfull-bleed背景として設計してください。見出し、本文、CTA、注記などの文字は画像へ焼き込まず、すべて選択可能なHTMLのcode-based textとして実装してください。
+
+許可するHero構成は次の2種類です。画像を小さな右カラムへ置くsplit panel、背景画像をHeroの一部だけに置く構成、文字入り生成画像、汎用的なAI球体や架空dashboardを主役にした構成は採用しないでください。
+
+#### Pattern A：左テキスト・右被写体
+
+- 背景画像はHero全面を覆うfull-bleedとします。
+- 見出し、本文、CTAは左側のcopy safe area内で左寄せにします。
+- 人物の顔、人物、character、案件固有illustrationを使う場合、主被写体と視覚的焦点は画像の右側へ配置します。
+- `background-position`、または意味を持つ画像なら`object-position`で右側の焦点を維持します。
+- テキストと顔、手、商品、主要被写体を重ねません。
+- mobileでは専用cropまたは専用生成画像を用意し、テキスト、CTA、顔、主要被写体を切りません。
+- Pattern Aは案件根拠のある人物、商品、使用場面、character、illustrationのための構成です。汎用的な抽象3Dや架空UIを置く根拠にはしません。
+
+#### Pattern B：中央テキスト・全面背景
+
+- 背景画像はHero全面を覆うfull-bleedとします。
+- 見出し、本文、CTAはcopy safe area内で中央寄せにします。
+- 中央テキストの背後に十分なnegative spaceを持つ背景画像を生成します。
+- 可読性が不足する場合はscrimまたはoverlayで画像を弱め、contrastを確保します。
+- テキストを独立した白いcardへ逃がして、全面背景という構成を実質的に失わせません。
+- mobileとdesktopの両方で中央軸、焦点、可読性を維持します。
+
+Hero画像生成前に、Pattern AまたはBの選択、案件上の理由、desktop／mobileの構図、copy safe area、被写体位置、想定crop、overlay、画像の役割、alt方針を提示してください。`imagegen-art-director`を利用できる場合は、この仕様を渡して実際に起動します。
+
+構図やpromptの作成だけでHero画像生成を完了扱いにしないでください。承認済み仕様をもとに画像生成toolで背景候補を実際に生成し、権利・実在誤認・案件適合・copy safe areaを確認して1案を選定し、作業フォルダ内のlocal assetとして保存してください。desktopとmobileで同じ原画を安全にcropできない場合は、別cropまたは別生成画像を用意します。保存した実assetを使って320、390、768、1024、1440pxで表示確認するまでHero工程は完了しません。
+
+実行環境で画像生成を利用できない場合は、無関係な外部画像や権利不明素材で代替しないでください。生成prompt、必要寸法、safe area、crop仕様とplaceholderを残して`UNVERIFIED`とし、Hero背景が未生成のまま`LOCAL_COMPLETE`と報告してはいけません。
+
+生成人物を実在顧客、社員、専門家として表示してはいけません。装飾背景はCSS backgroundとして扱い、同じ意味を本文で提供してください。意味を持つ画像として実装する場合は`img`または`picture`と適切なaltを使用してください。
+
+### HeaderとFooterの固定仕様
+
+Headerは全viewportで固定表示してください。
+
+- main contentとanchor遷移先がHeaderの下へ隠れないよう、Header実寸に基づく上余白と`scroll-margin-top`を設定します。
+- `env(safe-area-inset-top)`を考慮します。
+- desktopではbrand／logo、同一ページ内を中心とするnavigation、Primary CTAを明確に配置します。
+- mobileではnavigationをhamburger menuへ切り替えます。
+- menu buttonは44×44px以上の`button`要素とし、accessibility name、`aria-expanded`、`aria-controls`を実状態に合わせて更新します。
+- keyboardで開閉でき、Escapeで閉じられ、focusを常に視認できるようにします。
+- menu内link選択時とdesktop breakpointへの移行時にmenuを閉じます。
+- menuのlayer、scroll、focusを設計し、展開中も重要な本文やCTAを不意に隠しません。
+- JavaScript無効時も主要navigationとPrimary CTAへ到達できる構造にします。
+
+FooterにはHeaderと同じbrand表示、navigation label、遷移先、Primary CTAを再掲し、HeaderとFooterでlabelやURLを変えないでください。LPのconversionを競合させる外部導線は増やさず、原則として同一ページ内anchorとPrimary CTAへ限定します。
+
+- desktopではHeaderとの対応が分かる横方向の構成を使用できます。
+- mobileでは全要素を左寄せにし、`brand／logo → navigation → Primary CTA → 補足情報・法的link・copyright`の順で縦に並べます。
+- Footer navigationには`aria-label="フッターナビゲーション"`等を付け、Header navigationと支援技術上区別します。
 
 ### Visual direction
 
@@ -263,6 +368,7 @@ visual direction完了時は、font、type scale、line-height、semantic colors
 
 既存projectにdocument規約があれば従ってください。なければ、code編集前に承認済み内容を次へ保存してください。既存の同名fileがある場合は無断で置換せず、変更対象として再確認してください。
 
+- `docs/lp/00-execution-routing.md`
 - `docs/lp/01-requirements.md`
 - `docs/lp/02-reference-selection.md`
 - `docs/lp/03-structure.md`
@@ -287,6 +393,9 @@ visual direction完了時は、font、type scale、line-height、semantic colors
 - 画像へ寸法またはaspect-ratioを指定してlayout shiftを防ぐ
 - LCP画像以外はlazy loadを検討する
 - font familyとweightを絞り、必要に応じて `font-display: swap` を使う
+- Headerを固定し、mobileではaccessibility要件を満たすhamburger menuを実装する
+- Heroは承認済みのPattern AまたはBとし、背景画像を全面へ敷き、すべてのcopyとCTAをHTML textで実装する
+- FooterはHeaderと同じbrand、navigation、Primary CTAを再掲し、mobileでは左寄せの縦並びにする
 
 ## Phase 7：検証
 
@@ -313,6 +422,13 @@ visual direction完了時は、font、type scale、line-height、semantic colors
 - long URL、英単語、価格、tableでlayoutが壊れない
 - 200% zoomでも主要情報と操作を使える
 - full-bleedがviewport両端へ届き、inner containerの中心offsetが0
+- Heroに不自然な継ぎ目、引き伸ばし、重要被写体の切れがない
+- Pattern Aでは被写体が右側に維持され、左テキストと衝突しない
+- Pattern Bでは中央テキストの中心軸とcontrastが維持される
+- Heroの見出し、本文、CTAが画像内文字ではなく選択可能なHTML textである
+- fixed HeaderがHero、anchor遷移先、本文、form、OS safe areaを覆わない
+- hamburgerをkeyboard、Escape、pointerで操作でき、`aria-expanded`が実状態と一致する
+- Footerがmobileで左寄せ・縦並びになり、Headerとnavigation labelおよびURLが一致する
 
 ### Accessibility・motion
 
@@ -332,6 +448,7 @@ visual direction完了時は、font、type scale、line-height、semantic colors
 - Lighthouse Performance 90以上、Accessibility 95以上を目標とし、未達理由を記録。測定時はviewport、throttling、cold/warm cache、実行回数、代表値の取り方を記録する
 - 装飾1件のために大きなJS依存を追加しない
 - JS無効時も本文と主要linkを読める
+- HeroのLCP、画像format、寸法、responsive配信を確認し、必要に応じて`srcset`、`picture`または同等の方式を使う
 
 ### First-view five-second check
 
@@ -358,6 +475,8 @@ reviewでは最低限、次を判定してください。
 - contrast、focus、keyboard、reduced-motion、alt、label
 - assetの権利、参照模倣、架空claim
 - full-bleed、container中心、horizontal overflow
+- Hero Pattern、copy safe area、生成背景のmobile crop、code-based text
+- fixed Header、hamburgerのaccessibility、HeaderとFooterのnavigation整合
 - console error、404、performance上の重大問題
 
 review結果を `strengths / major issues / minor issues / mobile concerns / required fixes before delivery / first-view clarity / CTA clarity / trust・proof placement / hierarchy・polish / originality・imitation risk / required-reference status` に分け、`PASS / FAIL / PARTIAL / UNVERIFIED` で `docs/lp/06-verification.md` へ記録してください。
